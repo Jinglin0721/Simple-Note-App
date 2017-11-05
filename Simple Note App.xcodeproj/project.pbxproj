@@ -14,6 +14,7 @@
 		0E3821541FAD13720015A3BB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E3821521FAD13720015A3BB /* LaunchScreen.storyboard */; };
 		0E38215F1FAD13720015A3BB /* Simple_Note_AppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E38215E1FAD13720015A3BB /* Simple_Note_AppTests.swift */; };
 		0E38216A1FAD13720015A3BB /* Simple_Note_AppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3821691FAD13720015A3BB /* Simple_Note_AppUITests.swift */; };
+		0E3821781FAD19450015A3BB /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E3821771FAD19450015A3BB /* Note.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		0E3821651FAD13720015A3BB /* Simple Note AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Simple Note AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E3821691FAD13720015A3BB /* Simple_Note_AppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Simple_Note_AppUITests.swift; sourceTree = "<group>"; };
 		0E38216B1FAD13720015A3BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0E3821771FAD19450015A3BB /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				0E3821491FAD13720015A3BB /* AppDelegate.swift */,
+				0E3821771FAD19450015A3BB /* Note.swift */,
 				0E38214B1FAD13720015A3BB /* ViewController.swift */,
 				0E38214D1FAD13720015A3BB /* Main.storyboard */,
 				0E3821501FAD13720015A3BB /* Assets.xcassets */,
@@ -261,6 +264,7 @@
 			files = (
 				0E38214C1FAD13720015A3BB /* ViewController.swift in Sources */,
 				0E38214A1FAD13720015A3BB /* AppDelegate.swift in Sources */,
+				0E3821781FAD19450015A3BB /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,6 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //TODO: populate datapool with initial emails
+        //NEED: access to datapool object
+        let splitVC = self.window?.rootViewController as! UISplitViewController
+        
         return true
     }
 

@@ -14,10 +14,26 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
+    
+    var note: Note?
+    // var delegate: CellSelectedDelegate?
+    
+    override func viewDidload(){
+        super.viewDidLoad()
+        //Do any additional setup after loading the view, typicaly from a nib
+        
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func read(note:Note){
+        //read this Note page
+        titleLabel.text = note.title
+        contentLabel.text = note.contents
+        
     }
 
 
