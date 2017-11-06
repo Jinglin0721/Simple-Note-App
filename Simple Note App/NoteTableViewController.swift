@@ -15,22 +15,43 @@ class NoteTableViewController: UITableViewController, UINavigationControllerDele
     @IBOutlet weak var contentField: UITextView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
-    var notes = [Note]()
-    var managedObjectContext: NSManagedObjectContext!
+    var notes = [NSManagedObjectContext]()
+   // var managedObjectContext: NSManagedObjectContext!
     // var delegate: CellSelectedDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        loadData()
+        // managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        // loadData()
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: Selector(("addNote")))
         
         // Enable the Save button only if the text field has a valid Meal name.
         updateSaveButtonState()
+    }
+    
+    func addNote(){
+        let alterController = UIAlertController(title: "Type title", message: "Type Info", preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "title", style: UIAlertActionStyle.default, handler: ({{ (<#UIAlertAction#>) in
+            <#code#>
+            }}))
+    }
+    
+    func saveItem(itemToSave: String){
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedObjectContext = appDelegate.persistentContainer.viewContext //??
+        let entity = NSEntityDescription.entity(forEntityName: "Note", in: managedObjectContext)
+        let item = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
+        
+        do {
+            try managedObjectContext.save()
+            notes.append(item)
+        }catch{
+            print("Error")
+        }
     }
     
     //MARK: UITextFieldDelegate
