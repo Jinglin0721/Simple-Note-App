@@ -11,6 +11,7 @@ import UIKit
 class NoteTableViewCell: UITableViewCell{
 
     @IBOutlet weak var titleLabel: UILabel!
+
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -21,6 +22,5 @@ class NoteTableViewCell: UITableViewCell{
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-    }
-
+        }
 }
