@@ -8,50 +8,119 @@
 
 import UIKit
 import CoreData
+import os.log
 
-class NoteTableViewController: UITableViewController, UINavigationControllerDelegate {
+class NoteTableViewController: UITableViewController, UITextFieldDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var contentField: UITextView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
-    var notes = [NSManagedObjectContext]()
-   // var managedObjectContext: NSManagedObjectContext!
+    var notes = [Note]()
+    var managedObjectContext: NSManagedObjectContext!
     // var delegate: CellSelectedDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        // loadData()
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.add, target: self, action: Selector(("addNote")))
-        
-        // Enable the Save button only if the text field has a valid Meal name.
-        updateSaveButtonState()
+        managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        loadData()
     }
     
-    func addNote(){
-        let alterController = UIAlertController(title: "Type title", message: "Type Info", preferredStyle: .alert)
-        let confirmAction = UIAlertAction(title: "title", style: UIAlertActionStyle.default, handler: ({{ (<#UIAlertAction#>) in
-            <#code#>
-            }}))
-    }
-    
-    func saveItem(itemToSave: String){
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let managedObjectContext = appDelegate.persistentContainer.viewContext //??
-        let entity = NSEntityDescription.entity(forEntityName: "Note", in: managedObjectContext)
-        let item = NSManagedObject(entity: entity!, insertInto: managedObjectContext)
+    func loadData(){
+        let noteRequest:NSFetchRequest<Note> = Note.fetchRequest()
         
-        do {
-            try managedObjectContext.save()
-            notes.append(item)
-        }catch{
+        do{
+            notes = try managedObjectContext.fetch(noteRequest)
+            self.tableView.reloadData()
+        }catch {
             print("Error")
         }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - Table view data source
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return notes.count
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! NoteTableViewCell
+        
+        let currentNote = notes[indexPath.row]
+    
+        cell.titleLabel.text = currentNote.title
+        
+        return cell
+    }
+    @IBAction func cancel(_ sender: Any) {
+        // Depending on style of presentation (modal or push presentation), this view controller needs to be dismissed in two different ways.
+        let isPresentingInAddNote = presentingViewController is UINavigationController
+        
+        if isPresentingInAddNote {
+            dismiss(animated: true, completion: nil)
+        }
+        else if let owningNavigationController = navigationController{
+            owningNavigationController.popViewController(animated: true)
+        }
+        else {
+            fatalError("The NoteTableViewController is not inside a navigation controller.")
+        }
+    }
+    override func prepare(for segue:UIStoryboardSegue, sender: Any?){
+        super.prepare(for: segue, sender: sender)
+    
+        guard let button = sender as? UIBarButtonItem, button === saveButton else {
+            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
+            return
+        }
+            let noteAdder = Note(context: managedObjectContext)
+            
+            noteAdder.title = titleField.text
+            noteAdder.contents = contentField.text
+            
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            
+            let _ = navigationController?.popViewController(animated: true)
+        }
+    
+    func createNoteItem(){
+        let noteAdder = Note(context: managedObjectContext)
+        let alertController = UIAlertController(title: "Type title", message: "Type Info", preferredStyle: .alert)
+        alertController.addTextField { (textField: UITextField) in
+            textField.placeholder = "title"
+        }
+        alertController.addTextField { (textField: UITextField) in
+            textField.placeholder = "contents"
+        }
+        
+        alertController.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action:UIAlertAction) in
+            let titleField = alertController.textFields?.first
+            let contentField = alertController.textFields?.last
+            
+            if titleField?.text != "" && contentField?.text != ""{
+                noteAdder.title = titleField?.text
+                noteAdder.contents = contentField?.text
+                
+                do{
+                    try self.managedObjectContext.save()
+                }catch{
+                    print("error")
+                }
+            }
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
     }
     
     //MARK: UITextFieldDelegate
@@ -71,54 +140,15 @@ class NoteTableViewController: UITableViewController, UINavigationControllerDele
         updateSaveButtonState()
         navigationItem.title = textField.text
     }
-    
-    func loadData(){
-        let noteRequest:NSFetchRequest<Note> = Note.fetchRequest()
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let managedContext = appDelegate.persistentContainer.viewContext
         
-        do{
-            notes = try managedObjectContext.fetch(noteRequest)
-            self.tableView.reloadData()
-            
-        }catch {
-            print("Error")
-        }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return notes.count
-    }
-
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! NoteTableViewCell
-
-        let currentNote = notes[indexPath.row]
+        tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+        managedContext.delete(notes[indexPath.row])
         
-        cell.titleLabel.text = currentNote.title
-        return cell
-    }
-    //add botton on table of Notes View
-    @IBAction func addNote(_ sender: Any) {
-        let noteAdder = Note(context: managedObjectContext)
-        noteAdder.title = titleField.text
-        noteAdder.contents = contentField.text
-        
-        (UIApplication.shared.delegate as! AppDelegate).saveContext()
-        
-        let _ = navigationController?.popViewController(animated: true)
-    }
+}
     
 
     /*
@@ -165,12 +195,9 @@ class NoteTableViewController: UITableViewController, UINavigationControllerDele
         // Pass the selected object to the new view controller.
     }
     */
-    
-    //MARK: Private Methods
     private func updateSaveButtonState() {
         // Disable the Save button if the text field is empty.
         let text = titleField.text ?? ""
         saveButton.isEnabled = !text.isEmpty
     }
-
 }

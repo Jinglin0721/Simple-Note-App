@@ -54,8 +54,7 @@
                     <navigationItem key="navigationItem" title="Table of Notes" id="Mmj-3r-X8V">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="LSD-Bm-iro">
                             <connections>
-                                <action selector="addNote:" destination="8aS-YV-PRb" id="MjF-Eg-SFi"/>
-                                <segue destination="IDO-ay-2Ub" kind="presentation" identifier="addItem" id="lWd-x2-igf"/>
+                                <segue destination="IDO-ay-2Ub" kind="presentation" id="yba-yX-Zeu"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -64,7 +63,7 @@
             </objects>
             <point key="canvasLocation" x="-55.200000000000003" y="-232.53373313343329"/>
         </scene>
-        <!--NoteTitle (change)-->
+        <!--Note Table View Controller-->
         <scene sceneID="8nm-ds-1Uo">
             <objects>
                 <viewController id="T1d-L3-Lok" customClass="NoteTableViewController" customModule="Simple_Note_App" customModuleProvider="target" sceneMemberID="viewController">
@@ -109,8 +108,12 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="JVk-79-T5b"/>
                     </view>
-                    <navigationItem key="navigationItem" title="NoteTitle (change)" id="R0P-bY-9eJ">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="1Nh-dG-lDJ"/>
+                    <navigationItem key="navigationItem" id="R0P-bY-9eJ">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="1Nh-dG-lDJ">
+                            <connections>
+                                <action selector="cancel:" destination="T1d-L3-Lok" id="xLX-ew-1BO"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="xTK-OT-EA3"/>
                     </navigationItem>
                     <connections>
